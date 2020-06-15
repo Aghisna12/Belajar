@@ -2,11 +2,12 @@
 Bahan belajar bersama
 
 **File Kode.gs**
-* Update perbaikan coding 1
-* Menghapus ChatBot 2
+* Update perbaikan coding
+* Menghapus ChatBot
 
 **File Kode_Inline.gs**
-* Support Inline Search Query 1
+* Support Inline Search Query
+
 ![Contoh Inline](/img/inline.png)
 
 >Tiada kata terlambat untuk belajar
