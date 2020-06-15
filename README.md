@@ -7,6 +7,7 @@ Bahan belajar bersama
 
 **File Kode_Inline.gs**
 * Support Inline Search Query 1
+![Contoh Inline](/img/inline.png)
 
 >Tiada kata terlambat untuk belajar
 > | Waktu yang menentukan atas Kuasa Allah SWT
