@@ -31,6 +31,7 @@ var tg = new telegram.daftar(token);
 
 //untuk mengirim result query dari pencarian kata kunci
 //saya coba pakai library Telegram(bang Hasan [unofficial]) 'tg.request(..' tapi gagal :(
+/*
 function kirimInlineQuery(query_id, result) {
   var data = {
     method: "post",
@@ -42,6 +43,12 @@ function kirimInlineQuery(query_id, result) {
   }
   //fetch ke server api telegram sesuai identitas bot token
   return UrlFetchApp.fetch("https://api.telegram.org/bot" + token + "/", data);
+}
+*/
+
+//Update pake lib
+function kirimInlineQuery(query_id, result) {
+  tg.request('answerInlineQuery',{inline_query_id: query_id, results: JSON.stringify(result)});
 }
 
 // fungsi buat handle hanya menerima pesan berupa POST, kalau GET keluarkan pesan error
