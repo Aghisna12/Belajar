@@ -17,6 +17,7 @@ Bahan belajar bersama
 **File Kode_Cuaca.gs**
 * Bot prakiraan cuaca di indonesia
 sumber: api terbuka bmkg ([https://data.bmkg.go.id/prakiraan-cuaca/](https://data.bmkg.go.id/prakiraan-cuaca/))
+* Support inline search query
 
 ![Contoh Bot Cuaca](/img/bmkg.png)
 
