@@ -4,7 +4,7 @@ Bahan belajar bersama
 **File Kode.gs**
 * Bot data covid-19 di Indonesia
 
-###### Update
+***Update***
 * perbaikan coding
 * Menghapus ChatBot
 
