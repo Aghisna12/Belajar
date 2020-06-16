@@ -19,7 +19,7 @@ sumber: api terbuka bmkg ([https://data.bmkg.go.id/prakiraan-cuaca/](https://dat
 
 ![Contoh Bot Cuaca](/img/bmkg.png)
 
-##Semoga Bermanfaat
+## Semoga Bermanfaat
 
 >Tiada kata terlambat untuk belajar
 > | Waktu yang menentukan atas Kuasa Allah SWT
