@@ -21,6 +21,14 @@ sumber: api terbuka bmkg ([https://data.bmkg.go.id/prakiraan-cuaca/](https://dat
 
 ![Contoh Bot Cuaca](/img/bmkg.png)
 
+**File Kode_BotQuran.gs**
+* Bot Kumpulan Surat Al-Quran
+sumber api server: ([https://api.banghasan.com/](https://api.banghasan.com/))
+* Support Direct Search(private message) ```/info <Surat> atau /info <Surat> <Ayat>```
+* Support inline search query ```@namabot <Surat> atau @namabot <Surat> <Ayat>```
+
+![Contoh Bot Quran](/img/Ikhlas.png)
+
 ## Semoga Bermanfaat
 
 >Tiada kata terlambat untuk belajar
