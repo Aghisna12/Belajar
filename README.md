@@ -3,10 +3,8 @@ Bahan belajar bersama
 
 **File Kode.gs**
 * Bot data covid-19 di Indonesia
-
-***Update***
-* perbaikan coding
-* Menghapus ChatBot
+* perbaikan coding [***Update***]
+* Menghapus ChatBot [***Update***]
 
 **File Kode_Inline.gs**
 * Bot data covid-19 di Indonesia
