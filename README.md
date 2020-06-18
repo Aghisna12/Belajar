@@ -1,4 +1,4 @@
-# Belajar
+# Belajar Bot Telegram
 Bahan belajar bersama
 
 **File Kode.gs**
