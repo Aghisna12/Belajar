@@ -27,7 +27,14 @@ sumber api server: ([https://api.banghasan.com/](https://api.banghasan.com/))
 
 ![Contoh Bot Quran](/img/Ikhlas.png)
 
-## Semoga Bermanfaat
+**File Kode_BotSholat.gs**
+* Bot Jadwal Sholat Wilayah Indonesia(sumber: api.banghasan.com)
+* Support Direct Search(private message) ```/info <lokasi> atau /info <lokasi> <hari> <>```
+* Support inline search query ```@namabot <lokasi> atau @namabot <lokasi> <hari>```
+
+![Contoh Bot Quran](/img/sholat.png)
+
+## Semoga Bermanfaat, Terimakasih.
 
 >Tiada kata terlambat untuk belajar
 > | Waktu yang menentukan atas Kuasa Allah SWT
