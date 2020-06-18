@@ -35,6 +35,7 @@ sumber api server: ([https://api.banghasan.com/](https://api.banghasan.com/))
 ![Contoh Bot Quran](/img/sholat.png)
 
 ## Semoga Bermanfaat, Terimakasih.
+### Mohon maaf yang sebesar-besarnya jika ada salah penulisan / tindakan
 
 >Tiada kata terlambat untuk belajar
 > | Waktu yang menentukan atas Kuasa Allah SWT
