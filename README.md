@@ -34,6 +34,12 @@ sumber api server: ([https://api.banghasan.com/](https://api.banghasan.com/))
 
 ![Contoh Bot Quran](/img/sholat.png)
 
+**File Kode_BotOngkir.gs**
+* Bot Cek Ongkir Wilayah Indonesia(sumber : [ruangapi.com](https://ruangapi.com/))
+* Support Direct Search(private message) ```/<kurir> <asal> <berat> <tujuan>```
+* Support banyak kurir cek sekaligus (gunakan "," untuk memisah) ```contoh: /jne,jnt,tiki,lion```
+```Contoh: /jne sleman 1000 klaten``` atau ```/jne,jnt,lion sleman 1000 klaten```
+
 ## Semoga Bermanfaat, Terimakasih.
 ### Mohon maaf yang sebesar-besarnya jika ada salah penulisan / tindakan
 
