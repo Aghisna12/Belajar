@@ -3,7 +3,7 @@ Project Name : TelegramBot( Data Prakiraan Cuaca Terbuka BMKG Indonesia ) *Suppo
 Engine : Google App Script
 Language Code : JavaScript
 Date : 16-jun-2020 (5:23am)
-Last Update : none
+Last Update : 24-jun-2020 (11:24am)
 Credit : @Aghisna12
 
 Requirement:
@@ -25,8 +25,11 @@ Terimakasih : Allah SWT
               https://t.me/botindonesia(telegram group)
 */
 
+//maksimal hasiluntuk pencarian inline query. untuk meminimalis overload/timeout.
+var maksimal_hasil = 4;
+
 // masukkan token bot mu di sini
-var token = "API TELEGRAM BOT";
+var token = "TOKEN BOT TELEGRAM";
 
 //api server Data Prakiraan Cuaca Terbuka BMKG(https://data.bmkg.go.id/prakiraan-cuaca/)
 var api_bmkg = "https://data.bmkg.go.id/datamkg/MEWS/DigitalForecast/DigitalForecast-";
@@ -71,26 +74,32 @@ function cariInline(cari) {
         'type':'article',
         'id':'1',
         'title':res[0].kab_kota,
+        'thumb_url':'https://cdn.iconscout.com/icon/free/png-64/location-1684-1106829.png',
         'description':res[0].nama_provinsi,
         'message_text':infoBmkg(res[0].nama_provinsi, res[0].kab_kota),
-        'parse_mode':'HTML'
+        'parse_mode':'HTML',
+        'disable_web_page_preview':true
       });
     }
   } else {
     if (res.length > 1) {
       var uid = 0;
       res.forEach(function(object) {
-        if (object.kab_kota && object.nama_provinsi) {
-          hasil.push({
-            'type':'article',
-            'id':uid.toString(),
-            'title':object.kab_kota,
-            'description':object.nama_provinsi,
-            'message_text': infoBmkg(object.nama_provinsi, object.kab_kota),
-            'parse_mode':'HTML'
-          });
+        if (uid < maksimal_hasil) {
+          if (object.kab_kota && object.nama_provinsi) {
+            hasil.push({
+              'type':'article',
+              'id':uid.toString(),
+              'title':object.kab_kota,
+              'thumb_url':'https://cdn.iconscout.com/icon/free/png-64/location-1684-1106829.png',
+              'description':object.nama_provinsi,
+              'message_text': infoBmkg(object.nama_provinsi, object.kab_kota),
+              'parse_mode':'HTML',
+              'disable_web_page_preview':true
+            });
+          }
+          ++uid;
         }
-        ++uid;
       });
     }
   }
@@ -99,14 +108,22 @@ function cariInline(cari) {
 
 //format waktu/tanggal dari variable datetime
 function formatWaktu(datetime) {
+  var bulan_lengkap = ['error','jan','feb','mar','apr','mei','jun','jul','agust','sep','okt','nov','des'];
   var hasil = "";
   if (datetime.length == 12) {
     var tahun = datetime.slice(0, 4);
     var bulan = datetime.slice(4, 6);
     var hari = datetime.slice(6, 8);
+    hasil = hari + "-" + bulan_lengkap[parseInt(bulan)] + "-" + tahun;
+  }
+  if (datetime.length == 14) {
+    var tahun = datetime.slice(0, 4);
+    var bulan = datetime.slice(4, 6);
+    var hari = datetime.slice(6, 8);
     var jam = datetime.slice(8, 10);
     var menit = datetime.slice(10, 12);
-    hasil = "Tanggal:" + hari + "-" + bulan + "-" + tahun + " Jam:" + jam + ":" + menit;
+    var detik = datetime.slice(12, 14)
+    hasil = hari + "-" + bulan_lengkap[parseInt(bulan)] + "-" + tahun + " " + jam + ":" + menit + ":" + detik;
   }
   return hasil;
 }
@@ -114,25 +131,25 @@ function formatWaktu(datetime) {
 //untuk menentukan nama cuaca berdasarkan indek nomor
 function infoCuaca(index){
   var list_cuaca = {
-    0 : 'Cerah ☀',
-    1 : 'Cerah Berawan ⛅',
-    2 : 'Cerah Berawan⛅',
-    3 : 'Berawan ☁',
-    4 : 'Berawan ☁',
-    5 : 'Udara Kabur 🌁',
-    10 : 'Asap 🌫',
-    45 : 'Kabut 🌁',
-    60 : 'Hujan Ringan 🌧',
-    61 : 'Hujan Sedang 🌧',
-    63 : 'Hujan Lebat 🌧',
-    80 : 'Hujan Lokal 🌧',
-    95 : 'Hujan Petir ⛈',
-    97 : 'Hujan Petir ⛈',
-    100 : 'Cerah ☀',
-    101 : 'Cerah Berawan ⛅',
-    102 : 'Cerah Berawan ⛅',
-    103 : 'Berawan ☁',
-    104 : 'Berawan ☁'
+    0 : '☀ Cerah',
+    1 : '⛅ Cerah Berawan',
+    2 : '⛅ Cerah Berawan',
+    3 : '☁ Berawan',
+    4 : '☁ Berawan',
+    5 : '🌁 Udara Kabur',
+    10 : '🌫 Asap',
+    45 : '🌁 Kabut',
+    60 : '🌧 Hujan Ringan',
+    61 : '🌧 Hujan Sedang',
+    63 : '🌧 Hujan Lebat',
+    80 : '🌧 Hujan Lokal',
+    95 : '⛈ Hujan Petir',
+    97 : '⛈ Hujan Petir',
+    100 : '☀ Cerah',
+    101 : '⛅ Cerah Berawan',
+    102 : '⛅ Cerah Berawan',
+    103 : '☁ Berawan',
+    104 : '☁ Berawan'
   };
   if (list_cuaca[index]) {
     return list_cuaca[index];
@@ -157,7 +174,7 @@ function cariLokasi(cari) {
     JawaBarat: ['Bandung','Banjar','Bekasi','Ciamis','Cianjur','Cibinong','Cikarang','Cimahi','Cipanas','Cirebon','Cisarua','Depok','Gadog','Garut','Indramayu','Karawang','Kota Bogor','Kuningan','Lembang','Majalengka','Parigi','Pelabuhan Ratu','Purwakarta','Singaparna','Soreang','Subang','Sukabumi','Sumber','Sumedang','Tasikmalaya','Pelabuhan Ratu'],
     JawaTengah: ['Banjarnegara','Batang','Blora','Boyolali','Brebes','Cilacap','Demak','Jepara','Kajen','Karanganyar','Kebumen','Kendal','Klaten','Kudus','Magelang','Mungkid','Pati','Pekalongan','Pemalang','Purbalingga','Purwodadi','Purwokerto','Purworejo','Rembang','Salatiga','Semarang','Slawi','Sragen','Sukoharjo','Surakarta','Tegal','Temanggung','Ungaran','Wonogiri','Wonosobo','Pelabuhan Semarang'],
     JawaTimur: ['Bangkalan','Banyuwangi','Batu','Bojonegoro','Bondowoso','Gresik','Jember','Jombang','Kabupaten Blitar','Kabupaten Kediri','Kabupaten Madiun','Kabupaten Malang','Kabupaten Mojokerto','Kabupaten Pasuruan','Kabupaten Probolinggo','Kota Blitar','Kota Kediri','Kota Madiun','Kota Malang','Kota Mojokerto','Kota Pasuruan','Kota Probolinggo','Lamongan','Lumajang','Magetan','Nganjuk','Ngawi','Pacitan','Pamekasan','Ponorogo','Sampang','Sidoarjo','Situbondo','Sumenep','Surabaya','Trenggalek','Tuban','Tulungagung','Pelabuhan Surabaya'],
-    KalimantanBarat: [],
+    KalimantanBarat: ['Bengkayang','Kapuas Hulu','Kayong Utara','Ketapang','Kubu Raya','Landak','Melawi','Mempawah','Pontianak','Sambas','Sanggau','Sekadau','Singkawang','Sintang','Sungai Raya'],
     KalimantanSelatan: ['Amuntai','Banjarbaru','Banjarmasin','Barabai','Batulicin','Kandangan','Kotabaru','Marabahan','Martapura','Paringin','Pelaihari','Rantau','Tanjung'],
     KalimantanTengah: ['Buntok','Kasongan','Kuala Kapuas','Kuala Kurun','Kuala Pembuang','Muarateweh','Nanga Bulik','Palangkaraya','Pangkalan Bun','Pulangpisau','Puruk Cahu','Sampit','Sukamara','Tamiang Layang','Pelabuhan Sampit'],
     KalimantanTimur: ['Balikpapan','Bontang','Penajam','Samarinda','Sendawar','Sengata','Tanah Grogot','Tanjung Redeb','Tenggarong','Pelabuhan Balikpapan','Pelabuhan Nunukan','Pelabuhan Tarakan'],
@@ -210,9 +227,9 @@ function cariInfoCuaca(cari) {
       hasil = "Maaf, terdapat kesalahan pada daftar kabupaten/kota";
     }
   } else {
-    hasil = "<u>Maaf, Lokasi Tidak Ditemukan</u>";
+    hasil = "<u>Maaf, Lokasi Tidak Ditemukan</u>\nformat: <code>/info (nama kota/kabupaten)</code>\ncontoh: <code>/info sleman</code>";
     if (res.length > 1) {
-      hasil += "\n\n<i>Mungkin yang anda cari:</i>\n";
+      hasil += "\n\n<i>Mungkin yang anda maksud:</i>\n";
       res.forEach(function(object) {
         if (object.kab_kota && object.nama_provinsi) {
           hasil += "\t‣ <code>" + object.kab_kota + "</code> (" + object.nama_provinsi + ")\n";
@@ -223,66 +240,112 @@ function cariInfoCuaca(cari) {
   return hasil;
 }
 
+//memilih data bmkg untuk tanggal. jika, ada data tanggal kemarin maka tidak digunakan.
+function sekarangBesok(tgl_bmkg, tanggal) {
+  var date = new Date();
+  if (tgl_bmkg) {
+    var tgl = tgl_bmkg.slice(0, 12);
+    var th = tgl.slice(0, 4);
+    var bln = tgl.slice(4, 6);
+    var hr = tgl.slice(6, 8);
+    date = new Date(parseInt(th), parseInt(bln) - 1, parseInt(hr));
+  }
+  if (date) {
+    var sekarang = Utilities.formatDate(date, 'Asia/Jakarta', 'yyyyMMdd');
+    if (tanggal < sekarang) {
+      return false;
+    }
+    date.setDate(date.getDate() +2);
+    var besoknya = Utilities.formatDate(date, 'Asia/Jakarta', 'yyyyMMdd');
+    if (tanggal == besoknya) {
+      return false;
+    }
+  }
+  return true;
+}
+
 //fungsi untuk mengambil data api terbuka dari server bmkg
 function infoBmkg(provinsi, kab_kota) {
   var respon = UrlFetchApp.fetch(api_bmkg + provinsi + ".xml").getContentText();
-  var document = XmlService.parse(respon);
-  var root = document.getRootElement();
-  var area = root.getChild("forecast").getChildren();
-  var hasil = "<b><u>Provinsi:" + provinsi + " | Kab/Kota: " + kab_kota + "</u></b>\n";
-  var hasil_suhu = [];
-  var hasil_cuaca = [];
-  area.forEach(function(object) {
-    var nama_area_obj = object.getAttribute("description");
-    if (nama_area_obj) {
-      var nama_area = nama_area_obj.getValue();
-      if (nama_area == kab_kota) {
-      var params = object.getChildren();
-        params.forEach(function(param) {
-          var deskripsi_obj = param.getAttribute("description");
-          if (deskripsi_obj) {
-            var deskripsi = deskripsi_obj.getValue();
-            if (deskripsi == "Temperature") {
-              hasil += "\n<b>Info Suhu "
-              var temperatures = param.getChildren();
-              temperatures.forEach(function(temperature) {
-                var waktu_obj = temperature.getAttribute("datetime");
-                var suhu_obj = temperature.getChild("value");
-                if (waktu_obj && suhu_obj) {
-                  var waktu = waktu_obj.getValue();
-                  var suhu_celcius = suhu_obj.getText() + "°C";
-                  hasil_suhu.push({'waktu':waktu,'suhu_celcius':suhu_celcius});
+  if (respon) {
+    var document = XmlService.parse(respon);
+    var root = document.getRootElement();
+    if (root.getChild("forecast")) {
+      var forecast = root.getChild("forecast");
+      var area = forecast.getChildren();
+      var hasil = "<b>📌 " + kab_kota + " (" + provinsi + ")</b>\n";
+      var date_bmkg;
+      if (forecast.getChild("issue").getChild("timestamp").getText()) {
+        date_bmkg = forecast.getChild("issue").getChild("timestamp").getText();
+        //hasil += formatWaktu(date_bmkg) + "\n";
+      }
+      var hasil_suhu = [];
+      var hasil_cuaca = [];
+      //var dump_area = "\n";
+      area.forEach(function(object) {
+        var nama_area_obj = object.getAttribute("description");
+        if (nama_area_obj) {
+          var nama_area = nama_area_obj.getValue();
+          //dump_area += "'" + nama_area + "',";
+          if (nama_area == kab_kota) {
+            var params = object.getChildren();
+            params.forEach(function(param) {
+              var deskripsi_obj = param.getAttribute("description");
+              if (deskripsi_obj) {
+                var deskripsi = deskripsi_obj.getValue();
+                if (deskripsi == "Temperature") {
+                  var temperatures = param.getChildren();
+                  temperatures.forEach(function(temperature) {
+                    var waktu_obj = temperature.getAttribute("datetime");
+                    var suhu_obj = temperature.getChild("value");
+                    if (waktu_obj && suhu_obj) {
+                      var waktu = waktu_obj.getValue();
+                      var suhu_celcius = suhu_obj.getText() + "°C";
+                      hasil_suhu.push({'waktu':waktu,'suhu_celcius':suhu_celcius});
+                    }
+                  });
                 }
-              });
-            }
-            if (deskripsi == "Weather") {
-              hasil += "& Cuaca</b>\n"
-              var temperatures = param.getChildren();
-              temperatures.forEach(function(temperature) {
-                var waktu_obj = temperature.getAttribute("datetime");
-                var cuaca_obj = temperature.getChild("value");
-                if (waktu_obj && cuaca_obj) {
-                  var waktu = waktu_obj.getValue();
-                  var info_cuaca = infoCuaca(cuaca_obj.getText());
-                  hasil_cuaca.push({'waktu':waktu, 'info_cuaca':info_cuaca});
+                if (deskripsi == "Weather") {
+                  var temperatures = param.getChildren();
+                  temperatures.forEach(function(temperature) {
+                    var waktu_obj = temperature.getAttribute("datetime");
+                    var cuaca_obj = temperature.getChild("value");
+                    if (waktu_obj && cuaca_obj) {
+                      var waktu = waktu_obj.getValue();
+                      var info_cuaca = infoCuaca(cuaca_obj.getText());
+                      hasil_cuaca.push({'waktu':waktu, 'info_cuaca':info_cuaca});
+                    }
+                  });
                 }
-              });
+              }
+            });
+          }
+        }
+      });
+      var tanggal;
+      hasil_suhu.forEach(function(object, index) {
+        if (object.waktu && object.suhu_celcius) {
+          if (sekarangBesok(date_bmkg, object.waktu.slice(0, 8))) {
+            var waktu = object.waktu;
+            var suhu = object.suhu_celcius;
+            if (hasil_cuaca[index].waktu == waktu) {
+              var jam = waktu.slice(8, 10);
+              var menit = waktu.slice(10, 12);
+              if (tanggal != waktu.slice(0, 8)) {
+                tanggal = waktu.slice(0, 8);
+                hasil += "\n\t🗓 <b>" + formatWaktu(waktu) + "</b>\n\t\t • <code>" + jam + ":" + menit + "</code> " + hasil_cuaca[index].info_cuaca + " (" + suhu + ")\n";
+              } else {
+                tanggal = waktu.slice(0, 8);
+                hasil += "\t\t • <code>" + jam + ":" + menit + "</code> " + hasil_cuaca[index].info_cuaca + " (" + suhu + ")\n";
+              }
             }
           }
-        });
-      }
+        }
+      });
     }
-  });
-  hasil_suhu.forEach(function(object, index) {
-    if (object.waktu && object.suhu_celcius) {
-      var waktu = object.waktu;
-      var suhu = object.suhu_celcius;
-      if (hasil_cuaca[index].waktu == waktu) {
-        hasil += "\t‣ " + formatWaktu(waktu) + "\n\t\t• Suhu:" + suhu + "\n\t\t• Cuaca:" + hasil_cuaca[index].info_cuaca + "\n";
-      }
-    }
-  });
-  return hasil + '\n\nSumber:<a href="https://data.bmkg.go.id/prakiraan-cuaca/">BMKG</a>';
+  }
+  //Logger.log(dump_area);
+  return hasil + '\n✔️ Sumber:<a href="https://data.bmkg.go.id/prakiraan-cuaca/">BMKG</a>';
 }
 
 // fungsi utama kita buat handle segala pesan
@@ -290,33 +353,33 @@ function prosesPesan(update) {
   
   // detek klo ada pesan teks dari user
   if (update.message) { 
-
+    
     //simpan pesan bantuan
-    var help_msg = "Maaf, perintah yang anda masukan salah.";
+    var help_msg = "Maaf, perintah yang anda masukan salah. format: <code>/info (nama kota/kabupaten)</code>\ncontoh: <code>/info sleman</code>";
     
     // penyederhanaan variable pesan text
     var msg = update.message;
     var text = msg.text;
     var chat_id = msg.chat.id;
-
+    
     // jika user ketik /ping, bot akan jawab Pong!
     if ( /\/ping/i.exec(text) ){
       return tg.kirimPesan(chat_id, '<b>Pong!</b>', 'HTML');
     }
-
+    
     // eh ini saya tambahkan lagi, jika user klik start
     else if ( /\/start/i.exec(text) ){
-      return tg.kirimPesan(chat_id, "Pesan diterima!\n\nLanjutkan bang..!", 'HTML');
+      return tg.kirimPesan(chat_id, "Selamat datang, Semoga bermanfaat.\nTerimakasih...", 'HTML');
     }
     
-    //jika user ketik /info <Provinsi> untuk info data Covid-19 di Indonesia
+    //jika user ketik /info <kota/kabupaten> untuk info data prakiraan cuaca
     else if ( /\/info/i.exec(text) ){
       //memulai memngambil data dari web api
       var cuaca = cariInfoCuaca(text.replace("/info ", ""));
       //lanjut kirim ke user datanya
-      return tg.kirimPesan(chat_id, cuaca, 'HTML');
+      return tg.kirimPesan(chat_id, cuaca, 'HTML', true);
     }
-
+    
     // kalau nanti mau kembangin sendiri menjadi bot interaktif, code nya taruh disini
     // atau buatkan fungsi tersendiri saja buat handle nya biar ga bertumpuk panjang
     // -- mulai custom text --
@@ -356,7 +419,7 @@ function prosesPesan(update) {
 //menentukan webhook yang di set dari server telegram dengan identitas token bot dan situs point webhook untuk bot
 function setWebhook() {
   // Isi dengan web App URL yang di dapat saat deploy
-  var webAppUrl = "URL WEB SERVER HASIL DEPLOY GOOGLE APP SCRIPT";
+  var webAppUrl = "URL WEB APP HASIL DEPLOY";
   
   /*var hasil = */tg.setWebHook(webAppUrl);
   //Logger.log(hasil);
