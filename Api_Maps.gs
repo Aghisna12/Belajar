@@ -39,6 +39,15 @@ function testMaps() {
   Logger.log(JSON.stringify(test,null,2));
 }
 
+function testLimitMaps() {
+  for (var i = 0; i < 100; i++) {
+    var test = getMaps("monumen");
+    if (test) {
+      Logger.log(test.length);
+    }
+  }
+}
+
 /*
 Output Logger://testMaps()
 [20-07-14 05:23:14:717 PDT] [
