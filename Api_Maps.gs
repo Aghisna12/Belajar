@@ -1,7 +1,7 @@
 function getMaps(keyword, lat_from = "-7.7495851", long_from = "110.3674181") {//lat:-7.7495851 & long:110.3674181 (posisi/terdekat dari Sleman)
   var hasil = [];
   if (keyword) {
-    var api_maps = "https://www.google.com/s?tbm=map&gs_ri=maps&suggest=p&authuser=0&hl=en&gl=id&pf=t&tch=1&ech=12&q=";
+    var api_maps = "https://www.google.com/s?tbm=map&gs_ri=maps&suggest=p&authuser=0&hl=id&gl=id&pf=t&tch=1&ech=12&q=";
     var respon = UrlFetchApp.fetch(api_maps + keyword + "&pb=" + "!2d" +  long_from + "!3d" + lat_from).getContentText();
     if (respon) {
       var data = respon.replace(/\/\*(.*?)\*\//g, "");
@@ -39,51 +39,42 @@ function testMaps() {
   Logger.log(JSON.stringify(test,null,2));
 }
 
-function testLimitMaps() {
-  for (var i = 0; i < 100; i++) {
-    var test = getMaps("monumen");
-    if (test) {
-      Logger.log(test.length);
-    }
-  }
-}
-
 /*
 Output Logger://testMaps()
-[20-07-14 05:23:14:717 PDT] [
+[20-07-14 20:06:49:037 ICT] [
   {
-    "nama": "Monumen Nasional, Gambir, Central Jakarta City, Jakarta",
+    "nama": "Monumen Nasional, Gambir, Kota Jakarta Pusat, Daerah Khusus Ibukota Jakarta",
     "posisi": {
       "lat": "-6.1753924",
       "long": "106.8271528"
     }
   },
   {
-    "nama": "Monumen Yogya Kembali, Jl. Ring Road Utara, Jongkang, Sariharjo, Sleman Regency, Special Region of Yogyakarta",
+    "nama": "Monumen Yogya Kembali, Jl. Ring Road Utara, Jongkang, Sariharjo, Kabupaten Sleman, Daerah Istimewa Yogyakarta",
     "posisi": {
       "lat": "-7.7495904",
       "long": "110.3696068"
     }
   },
   {
-    "nama": "Monumen Kresek, Sewu, Kresek, Madiun, East Java",
+    "nama": "Monumen Kresek, Sewu, Kresek, Madiun, Jawa Timur",
     "posisi": {
       "lat": "-7.705077299999999",
       "long": "111.63098339999999"
     }
   },
   {
-    "nama": "Monumen Kapal Selam, Jalan Pemuda, Embong Kaliasin, Surabaya City, East Java",
+    "nama": "Monumen Tugu, Gowongan, Kota Yogyakarta, Daerah Istimewa Yogyakarta",
     "posisi": {
-      "lat": "-7.2654304",
-      "long": "112.7503052"
+      "lat": "-7.782984",
+      "long": "110.367035"
     }
   },
   {
-    "nama": "Monumen Jayandaru, Jalan Jenggolo, Rw1, Sidokumpul, Sidoarjo Regency, East Java",
+    "nama": "Monumen Kapal Selam, Jalan Pemuda, Embong Kaliasin, Kota Surabaya, Jawa Timur",
     "posisi": {
-      "lat": "-7.4462755",
-      "long": "112.7184116"
+      "lat": "-7.2654304",
+      "long": "112.7503052"
     }
   }
 ]
