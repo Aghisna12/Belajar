@@ -13,13 +13,11 @@ function getMaps(keyword, lat_from = "-7.7495851", long_from = "110.3674181") {/
     var api_maps = "https://www.google.com/s?tbm=map&gs_ri=maps&suggest=p&authuser=0&hl=id&gl=id&pf=t&tch=1&ech=12&q=";
     var respon = UrlFetchApp.fetch(api_maps + keyword + "&pb=" + "!2d" +  long_from + "!3d" + lat_from).getContentText();
     if (respon) {
-      //Logger.log(respon);
       var data = respon.replace(/\/\*(.*?)\*\//g, "");
       if (data) {
         var json = JSON.parse(data);
         if (json.d) {
           var map_d = (json.d).replace(/(?:\r\n|\r|\n)/g, "").replace(/null,/g, "");
-          //var maps = map_d.match(/,\[\["0x(.*?)\]/g);
           var maps = map_d.match(/\[\[\[(.*?)\[\["0x/g);
           if (maps) {
             for (var index in maps) {
